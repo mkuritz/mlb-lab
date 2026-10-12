@@ -1,0 +1,49 @@
+name: Refresh MLB Lab
+
+# Daily refresh plus pre-game runs ($0: public APIs only). Times are UTC.
+#  06:30 UTC ~ 2:30 AM ET (grade last night) · 11:30 ~ 7:30 AM ET (morning slate)
+#  15:00-00:30 UTC = afternoon/evening runs to pick up confirmed lineups, umpires, roof status, Kalshi + Bet Lab's DK pull.
+on:
+  schedule:
+    - cron: "30 6 * * *"
+    - cron: "30 11 * * *"
+    - cron: "0 15 * * *"
+    - cron: "30 17 * * *"
+    - cron: "45 19 * * *"
+    - cron: "45 20 * * *"
+    - cron: "45 21 * * *"
+    - cron: "45 22 * * *"
+    - cron: "45 23 * * *"
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-mlb
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Build
+        run: python scripts/build.py
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898475+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Refresh MLB Lab $(TZ=America/New_York date '+%Y-%m-%d %H:%M %Z')"
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
