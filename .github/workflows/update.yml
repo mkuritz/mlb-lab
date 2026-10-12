@@ -39,6 +39,9 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Build
         run: python scripts/build.py
+      - name: Season guard (current season from date + same-day live roster check)
+        continue-on-error: true
+        run: python scripts/season_guard.py
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"

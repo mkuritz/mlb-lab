@@ -114,13 +114,13 @@ def kalshi(series):
 
 # ---------- 5. models ----------
 def fit_hr():
-  A=pd.read_parquet(f'{C}/hrF_2025.parquet') if os.path.exists(f'{C}/hrF_2025.parquet') else hr_model.build(2025)
+  A=pd.read_parquet(f'{C}/hrF_{YR-1}.parquet') if os.path.exists(f'{C}/hrF_{YR-1}.parquet') else hr_model.build(YR-1)  # HISTORICAL: prior-season training rows only (model fit), never current roster/role
   B=hr_model.build(YR)
   tr=pd.concat([A,B]);tr=tr[(tr.spot>0)].dropna(subset=hr_model.FEATS)
   m=make_pipeline(StandardScaler(),LogisticRegression(C=0.5,max_iter=2000)).fit(tr[hr_model.FEATS],tr.y)
   return m,B
 def fit_k():
-  A=pd.read_parquet(f'{C}/kF_2025.parquet') if os.path.exists(f'{C}/kF_2025.parquet') else k_model.build(2025)
+  A=pd.read_parquet(f'{C}/kF_{YR-1}.parquet') if os.path.exists(f'{C}/kF_{YR-1}.parquet') else k_model.build(YR-1)  # HISTORICAL: prior-season training rows only
   B=k_model.build(YR);tr=pd.concat([A,B]).dropna(subset=k_model.KFEATS+['K'])
   m=make_pipeline(StandardScaler(),PoissonRegressor(alpha=1e-3,max_iter=1000)).fit(tr[k_model.KFEATS],tr.K)
   mu=m.predict(tr[k_model.KFEATS]);a=max(1e-3,float(np.mean(((tr.K-mu)**2-mu))/np.mean(mu**2)))
@@ -223,7 +223,7 @@ def main():
     dk_status=dk.get('status','unavailable') if dk else 'unavailable',kalshi=dict(hr=len(khr),k=len(kks)),
     note={'today':f'Live slate for {day}','next':f'No MLB games today ({TODAY}). Showing the next slate: {day}','latest_completed':f'No upcoming games within 7 days. Showing the latest completed slate: {day}'}[mode])
   W('slate.json',dict(date=day,mode=mode,games=games))
-  W('hr_scores.json',dict(date=day,mode=mode,generated=meta['updated'],model='logistic regression, walk-forward backtested',units='p_hr = estimated probability of 1+ HR in the game; score = percentile (1-99) of p_hr among 2026 batter-games',players=out))
+  W('hr_scores.json',dict(date=day,mode=mode,generated=meta['updated'],model='logistic regression, walk-forward backtested',units='p_hr = estimated probability of 1+ HR in the game; score = percentile (1-99) of p_hr among %d batter-games'%YR,players=out))
   W('k_projections.json',dict(date=day,mode=mode,generated=meta['updated'],model='Poisson GLM + negative-binomial spread (alpha=%.3f)'%ka,king=king,pitchers=kout))
   # postseason workload table
   post=pg[(pg.start==1)&(pg.d>=f'{YR}-09-01')].p.unique()

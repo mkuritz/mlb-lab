@@ -85,5 +85,5 @@ def build(y,targets=None,live_pa=None,live_pg=None):
   T.attrs['LG']={k:float(v) for k,v in LG.items()}
   return T
 if __name__=='__main__':
-  for y in (2025,2026):
+  for y in (__import__('datetime').date.today().year-1,__import__('datetime').date.today().year):  # HISTORICAL prior season + current
     F=build(y);F.to_parquet(f'/workspace/mlbraw/hrF_{y}.parquet');print(y,len(F),F.y.mean());print(F[FEATS].describe().T[['mean','std','min','max']])

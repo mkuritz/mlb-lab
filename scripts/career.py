@@ -25,6 +25,6 @@ def prior_high(d,pid,season):
 if __name__=='__main__':
   import pandas as pd
   ids=set()
-  for y in (2025,2026):
+  for y in (__import__('datetime').date.today().year-1,__import__('datetime').date.today().year):  # HISTORICAL prior season + current
     g=pd.read_parquet(f'data/cache/pg_{y}.parquet');ids|=set(g[g.start==1].p)
   print(len(ensure(ids)))

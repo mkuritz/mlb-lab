@@ -11,6 +11,6 @@ def ensure(ids):
   json.dump(d,open(P,'w'));return d
 if __name__=='__main__':
   ids=set()
-  for y in (2025,2026):
+  for y in (__import__('datetime').date.today().year-1,__import__('datetime').date.today().year):  # HISTORICAL prior season + current
     pa=pd.read_parquet(f'data/cache/pa_{y}.parquet');ids|=set(pa.b)|set(pa.p)
   print(len(ensure(ids)))

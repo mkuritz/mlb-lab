@@ -63,5 +63,5 @@ def build(y,targets=None,live_pa=None,live_pg=None):
   T['park_k']=T.venueId.map(PF).fillna(1.0)
   return T
 if __name__=='__main__':
-  for y in (2025,2026):
+  for y in (__import__('datetime').date.today().year-1,__import__('datetime').date.today().year):  # HISTORICAL prior season + current
     F=build(y);F.to_parquet(f'/workspace/mlbraw/kF_{y}.parquet');print(y,len(F),F.K.mean());print(F[KFEATS].describe().T[['mean','std','min','max']])
