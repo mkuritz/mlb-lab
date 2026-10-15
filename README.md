@@ -9,3 +9,15 @@ Live: https://mkuritz.github.io/mlb-lab/
 - Refresh: `.github/workflows/update.yml` runs `scripts/build.py` (daily + pre-game).
 
 MLB Lab · A Sports Labs Product · Property of Michael Kuritz
+
+
+## How this repo is built
+The Home Run Score and Strikeout King models (code, weights, features, full outputs) live in a **private** engine repo.
+Its GitHub Action builds the slate and pushes **display-ready fields only** into `data/` here. Nothing in this repo
+is enough to reproduce the models. Note: model scripts and feature caches that were in this repo before Oct 15, 2026
+remain in git history.
+
+Data: MLB Stats API, Baseball Savant/Statcast, Open-Meteo, Kalshi public prices. News & roundups are written by
+Sports Labs from official MLB box scores and transactions.
+
+MLB Lab · A Sports Labs Product
