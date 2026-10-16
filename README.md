@@ -3,7 +3,7 @@ A free Sports Labs product: proprietary **Home Run Score** (P(1+ HR) per batter-
 
 Live: https://mlblab.sportslabshq.com/
 
-- Sources ($0): MLB Stats API, Baseball Savant/Statcast (pybaseball), Open-Meteo, Kalshi public markets, DraftKings props via Bet Lab's credit-guarded Odds API pull (`bet-lab/data/mlb_dk_props.json`). No RotoWire/RotoWorld/FanGraphs scraping.
+- Sources ($0): MLB Stats API, Baseball Savant/Statcast (pybaseball), Open-Meteo, Kalshi public markets, DraftKings props via Bet Lab's Odds API pull (`bet-lab/data/mlb_dk_props.json`). No RotoWire/RotoWorld/FanGraphs scraping.
 - Exports for Bet Lab: `data/hr_scores.json`, `data/k_projections.json`.
 - Backtests: `scripts/backtest_hr.py`, `scripts/backtest_k.py` -> `data/backtest_*.json`; fatigue case study `scripts/fatigue.py` -> `data/fatigue_case.json`.
 - Refresh: `.github/workflows/update.yml` runs `scripts/build.py` (daily + pre-game).
