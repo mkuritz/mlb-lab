@@ -1,0 +1,22 @@
+[
+ {
+  "date": "2026-10-15",
+  "kind": "king",
+  "title": "\ud83d\udc51 Strikeout King: Gavin Williams",
+  "game": "TB @ CLE",
+  "pick": "Strikeout King of the Day, projected 7.4 K (line over 6.5)",
+  "stat": "9 K in 5.0 IP, 2 H, 2 ER, 1 BB, 70 pitches (W). Over 6.5 \u2705 CLE 3, TB 2.",
+  "proof": "Posted pre-game in data/k_projections.json, commit 96453c8 at 11:40 AM ET (first pitch 1:10 PM ET)",
+  "source": "MLB box score, game 849818"
+ },
+ {
+  "date": "2026-10-15",
+  "kind": "hr",
+  "title": "\ud83d\udca3 Top HR pick: Shohei Ohtani",
+  "game": "MIL @ LAD",
+  "pick": "#1 Home Run Score (99), 24.3% to homer vs 15.5% Kalshi implied",
+  "stat": "HR \u2705 1-for-2, HR, 3 RBI, 1 R (box score at 9:30 PM ET, game in progress)",
+  "proof": "#1 in data/hr_scores.json in every pre-game build, last commit 8d08e7b at 7:50 PM ET (first pitch 8:10 PM ET)",
+  "source": "MLB box score, game 849810"
+ }
+]
