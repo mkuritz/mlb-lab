@@ -41,7 +41,9 @@ details summary{cursor:pointer;color:var(--a)}
 .big3{display:flex;gap:22px;flex-wrap:wrap;margin-top:10px}.big3 b{display:block;font-size:26px;line-height:1.1}
 .ci{border-left:4px solid var(--g)}
 
-</style></head><body>
+</style><script src="https://mkuritz.github.io/bet-lab/hero.js" defer></script><script>
+document.addEventListener("DOMContentLoaded",()=>{const a=document.getElementById("app");const f=()=>{const h=(location.hash||"#today").slice(1);if((h===""||h==="today")&&!a.querySelector("[data-slhero]")&&!a.querySelector(".card")?.textContent.startsWith("Loading")){const d=document.createElement("div");d.setAttribute("data-slhero","");d.style.margin="0 0 12px";a.prepend(d);window.SLHero&&window.SLHero()}};new MutationObserver(f).observe(a,{childList:true});window.addEventListener("hashchange",()=>setTimeout(f,50));setTimeout(f,1500)});
+</script></head><body>
 <header><div class="top"><button class="mb" onclick="document.body.classList.toggle('navopen')" aria-label="Menu">☰</button><div class="logo">MLB <span>Lab</span></div><div class="tag">Vision with Data</div><a class="brand" href="https://mkuritz.github.io/sports-labs/" title="Sports Labs">▲ Sports Labs</a><div class="badge" id="badge">Loading…</div></div></header>
 <aside><nav id="nav"></nav></aside><div id="scrim" onclick="document.body.classList.remove('navopen')"></div><main id="app"><div class="card">Loading data…</div></main>
 <script>
