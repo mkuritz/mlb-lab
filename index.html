@@ -120,7 +120,7 @@ function backtest(){return method()}
 function method(){return `<div class="card"><h3>What MLB Lab is</h3><p>MLB Lab turns public pitch-by-pitch data into a daily Home Run Score and strikeout projections, compared with real sportsbook prices. Not betting advice. 21+.</p></div>`}
 function news(){const N=D.news;if(!N)return '<div class="card m">News feed not available yet.</div>';const T=Object.keys(N.teams||{}).sort();let t=localStorage.getItem('mlblab:nt')||'ALL';
  const R=N.roundup||{games:[]};
- let h=`<h2>📰 News & Daily Roundup</h2><div class="note">Written by Sports Labs from official MLB Stats API box scores and transactions. Updated ${esc(N.updatedET||'')}.</div>`;
+ let h=`<h2>📰 News & Daily Roundup</h2><div class="note">Written by Sports Labs from official box scores and transactions. Updated ${esc(N.updatedET||'')}.</div>`;
  h+=`<div class="card"><h3>Yesterday's roundup · ${R.date?dLong(R.date):''}</h3>${R.games.length?R.games.map(g=>`<div style="padding:8px 0;border-bottom:1px solid var(--b)"><b>${esc(g.away)} ${g.ascore} – ${esc(g.home)} ${g.hscore}</b> <span class="m small">${esc(g.series||'')}</span><div class="small">${esc(g.text)}</div></div>`).join(''):'<span class="m">No completed games yesterday.</span>'}</div>`;
  const items=t==='ALL'?T.flatMap(a=>(N.teams[a]||[]).map(x=>({...x,team:a}))).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,60):(N.teams[t]||[]).map(x=>({...x,team:t}));
  h+=`<div class="card"><h3>Team news (official transactions)</h3><div class="filters" style="margin-bottom:8px"><select onchange="localStorage.setItem('mlblab:nt',this.value);route()"><option value="ALL">All teams</option>${T.map(a=>`<option${a===t?' selected':''}>${a}</option>`).join('')}</select></div>
