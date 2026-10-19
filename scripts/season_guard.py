@@ -213,15 +213,15 @@ def nhl_lab():
 def mlb_lab():
     m = ld("data/meta.json", {}); check_season_field("meta.json", m.get("season"), "mlb")
     h = ld("data/hr_scores.json", {})
-    if h.get("date", "") >= str(TODAY):
+    if (h.get("date") or "") >= str(TODAY):
         check_fresh("hr_scores.json", h.get("generated", ""), h.get("date") == str(TODAY))
         check_players("mlb", "hr_scores.json", ((p["name"], p["team"], p.get("id"), True) for p in h.get("players", [])))
     k = ld("data/k_projections.json", {})
-    if isinstance(k, dict) and k.get("date", "") >= str(TODAY):
+    if isinstance(k, dict) and (k.get("date") or "") >= str(TODAY):
         rows = k.get("pitchers") or k.get("players") or []
         check_players("mlb", "k_projections.json", ((p.get("name"), p.get("team"), p.get("id"), True) for p in rows if isinstance(p, dict)))
     s = ld("data/slate.json", {})
-    if s.get("date", "") >= str(TODAY):
+    if (s.get("date") or "") >= str(TODAY):
         for gm in s.get("games", []):
             for side in ("home", "away"):
                 sp = (gm.get("sp") or {}).get(side)
