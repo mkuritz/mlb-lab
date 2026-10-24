@@ -65,7 +65,7 @@ details summary{cursor:pointer;color:var(--a)}
 </style><script src="https://betlab.sportslabshq.com/hero.js" defer></script><script>
 document.addEventListener("DOMContentLoaded",()=>{const a=document.getElementById("app");const f=()=>{const h=(location.hash||"#today").slice(1);if(typeof IDLE==="function"&&D.meta&&IDLE())return;if((h===""||h==="today")&&!a.querySelector("[data-slhero]")&&!a.querySelector(".card")?.textContent.startsWith("Loading")){const d=document.createElement("div");d.setAttribute("data-slhero","");d.dataset.sport="mlb";d.style.margin="0 0 12px";a.prepend(d);window.SLHero&&window.SLHero()}};new MutationObserver(f).observe(a,{childList:true});window.addEventListener("hashchange",()=>setTimeout(f,50));setTimeout(f,1500)});
 </script><script src="https://sportslabshq.com/sl/sl.js" defer></script><script src="https://betlab.sportslabshq.com/liveres.js?v=2"></script>
-<script src="sl-sports.js"></script><script src="/sl-neutral.js" defer></script><script src="hrking.js?v=3"></script></head><body>
+<script src="sl-sports.js"></script><script src="/sl-neutral.js" defer></script><script src="tailcard.js?v=1"></script><script src="hrking.js?v=4"></script></head><body>
 <header><div class="top"><button class="mb" onclick="document.body.classList.toggle('navopen')" aria-label="Menu">☰</button><div class="logo">MLB <span>Lab</span></div><div class="tag">Vision with Data</div><a class="brand" href="https://sportslabshq.com/" title="Sports Labs">▲ Sports Labs</a><div class="badge" id="badge">Loading…</div></div></header>
 <aside><nav id="nav"></nav></aside><div id="scrim" onclick="document.body.classList.remove('navopen')"></div><main id="app"><div class="card">Loading data…</div></main>
 <script>
@@ -223,6 +223,10 @@ function topHrCallouts(H){
     <div style="flex:1;min-width:0">${hrProbBar(p,g)}</div>
     ${park(g.env||{},g.venue||'',118)}
    </div>
+   <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:4px">
+    <a class="sl-bl-btn" href="https://betlab.sportslabshq.com/?sport=mlb&amp;addleg=${encodeURIComponent(p.name+'|Home Runs')}" target="_blank" rel="noopener">➕ Bet Lab Slip</a>
+    <button type="button" class="sl-tail-btn" data-mlb-tail="${p.id}">📸 Card</button>
+   </div>
   </div>`;
  }).join('')}</div>`;
 }
@@ -331,5 +335,32 @@ function route(){const [v,arg]=(location.hash.slice(1)||'today').split('/');docu
  const el=$('#app');try{el.innerHTML=({today,parlays,matchups:()=>matchups(arg),hrking:()=>hrking(arg),pitchers:()=>pitchers(arg),batted:()=>battedBall(),news,backtest,method}[v]||today)();sortable(el)}catch(e){console.error(e);el.innerHTML='<div class="card r">Something went wrong rendering this view.</div>'}scrollTo(0,0)}
 (async()=>{try{const ks=['meta','slate','hr_scores','k_projections','pitchers','fatigue_case'];const r=await Promise.all(ks.map(k=>J(`data/${k}.json`)));
  [D.meta,D.slate,D.hr,D.k,D.pit,D.fat]=r;D.bth={};D.btk={};[D.news,D.hrr,D.ci,D.ph]=await Promise.all(['news','hrr','called_it_mlb','phase'].map(k=>J(`data/${k}.json`).catch(()=>null)));if(D.ph&&D.ph.offseason)V[0][1]='⚾ Offseason';D.fatnote=D.fat._note||'';delete D.fat._note;$('#badge').textContent='Updated '+D.meta.updatedET;buildNav();addEventListener('hashchange',route);route()}catch(e){console.error(e);$('#app').innerHTML='<div class="card r">Could not load data.</div>'}})();
+document.addEventListener('click',e=>{
+ const tb=e.target.closest('[data-mlb-tail]');
+ if(!tb)return;
+ e.stopPropagation();
+ const pid=tb.getAttribute('data-mlb-tail');
+ const p=(D.hr?.players||[]).find(x=>String(x.id)===String(pid));
+ if(p&&window.SLTailCard){
+  const g=G(p.pk)||{env:{}};
+  const fe=p.feats||{};
+  const mk=p.market;
+  SLTailCard.show({
+   hub:'MLB LAB · HR KING',
+   title:`${p.name} (${p.team} ${p.home?'vs':'@'} ${p.opp})`,
+   sub:`HR Score ${p.score}/99 · Bats ${p.bats} · vs ${(p.pitcher&&p.pitcher.name)||'TBD'}`,
+   accent:'#ff9f43',
+   rows:[{
+    player:p.name,market:'Home Runs',line:'0.5',
+    meta:`Model HR: ${pct(p.p_hr,1)} · Barrel ${pct(fe.barrel,1)} · EV ${f(fe.ev,1)} mph`,
+    rightTop:mk&&mk.odds!=null?`Book A ${mk.odds>0?'+':''}${mk.odds}`:`HR Score ${p.score}`,
+    rightBot:p.edge!=null?`Edge ${p.edge>0?'+':''}${(p.edge*100).toFixed(1)} pts`:'Highlighted Callout'
+   }],
+   footerLeft:`Model 1+ HR Chance: ${pct(p.p_hr,1)} (HR Score ${p.score})`,
+   footerRight:'mlblab.sportslabshq.com · 21+',
+   filename:`mlblab-hr-${p.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}.png`
+  });
+ }
+});
 </script><div class="sl-credit" style="clear:both;text-align:center;font-size:12px;opacity:.6;padding:18px 12px 22px;line-height:1.5">MLB Lab · A <a href="https://sportslabshq.com/" style="color:inherit;text-decoration:underline">Sports Labs</a> Product · © 2026 Sports Labs · <a href="#" data-lead="contact" style="color:inherit;text-decoration:underline">Contact</a> · <a href="#" data-lead="support" style="color:inherit;text-decoration:underline">Support</a></div>
 <script src="https://sportslabshq.com/js/leads-config.js"></script><script src="https://sportslabshq.com/js/leads.js" data-product="MLB Lab" data-float="1"></script><script>/*last-updated*/(async()=>{let t=null;for(const u of["data/meta.json","data/slate.json",location.pathname]){try{const r=await fetch(u+"?lu="+Date.now(),{method:"HEAD",cache:"no-store"});if(r.ok&&r.headers.get("last-modified")){t=new Date(r.headers.get("last-modified"));break}}catch(e){}}if(!t)return;const d=document.createElement("div");d.textContent="Updated "+t.toLocaleString("en-US",{timeZone:"America/New_York",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+" ET";d.style.cssText="position:fixed;right:8px;bottom:8px;z-index:50;background:rgba(15,23,42,.85);color:#cbd5e1;font:600 11px system-ui;padding:4px 9px;border-radius:99px;border:1px solid rgba(148,163,184,.3);pointer-events:none";document.body.appendChild(d)})();</script></body></html>
