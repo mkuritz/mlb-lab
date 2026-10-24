@@ -85,6 +85,7 @@ window.hrking=function(arg){sty();HK.selArg=arg;if(HK.data===undefined){load();r
  <div class="hk-side"><div class="hk-pl"><img alt="" src="https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/${p.id}/headshot/67/current"><div><div class="m small">HR Score</div><div class="hk-sc" style="color:${scol(p.score)}">${p.score}</div><div style="font-weight:800;margin-top:4px">${X(p.name)}</div><div class="small m">${X(p.team)} ${p.home?'vs':'@'} ${X(p.opp)} · bats ${X(p.bats)} · #${p.spot??'–'} ${p.lineup==='projected'?'<span class="pill est">proj</span>':'<span class="pill ok">conf</span>'}</div></div></div>
  <div class="hk-g" aria-label="HR Score ${p.score} of 100"><i style="left:calc(${p.score}% - 1px)"></i><span style="left:${p.score}%">${p.score}</span></div>
  <div class="small m" style="margin:-6px 0 12px">Our chance of 1+ HR: <b style="color:var(--t)">${pct(p.p_hr)}</b> · estimate, not a guarantee${p.score>=75?' · <span class="pill ok">Highlighted</span>':''}</div>
+ ${window.hrProbBar?`<div style="margin-bottom:10px">${window.hrProbBar(p,sg)}</div>`:''}
  <div class="hk-cards">${Object.entries(CARDS).map(([k,l])=>`<button class="hk-c ${HK.card===k?'on':''}" onclick="HK.card=HK.card==='${k}'?null:'${k}';HK.r()"><small>${l}</small><b>${val[k]}</b></button>`).join('')}</div>
  ${HK.card?`<div class="hk-ex"><b>${CARDS[HK.card]}.</b> ${explain(HK.card,p,g||{venue:sg.venue},W)}</div>`:'<div class="small m" style="margin-top:8px">Tap a card for what it means.</div>'}
  </div></div>

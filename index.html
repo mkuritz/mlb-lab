@@ -49,10 +49,23 @@ details summary{cursor:pointer;color:var(--a)}
 .phase{display:flex;gap:10px;align-items:flex-start;background:linear-gradient(120deg,#13284a,#131a2e 70%);border:1px solid #2a4f86;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:13px}.phase b.t{color:var(--o);letter-spacing:.06em;font-size:11px;white-space:nowrap;padding-top:2px}
 .champ{text-align:center;background:linear-gradient(120deg,#3a2a05,#131a2e 55%,#0e2a3a);border:1px solid #6b5512;border-radius:16px;padding:22px;margin-bottom:14px}.champ .big{font-size:30px;font-weight:900}
 
+
+.park-svg-viz{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 60%,#152642 0%,#0d1528 75%);border:1px solid #2b3c66;border-radius:12px;padding:6px;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.28)}
+.park-svg-viz svg{display:block}
+@keyframes windPulse{0%{stroke-dashoffset:16}100%{stroke-dashoffset:0}}
+.wv-flow{stroke-dasharray:4 4;animation:windPulse 1.2s linear infinite}
+.hr-callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:12px;margin:10px 0 14px}
+.hr-callout{background:linear-gradient(145deg,#16203a,#10172b);border:1px solid #2b3c66;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.hr-callout-top{display:flex;gap:10px;align-items:center}
+.hr-prob-viz{background:#0c1324;border:1px solid #233256;border-radius:9px;padding:7px 9px}
+.hr-prob-viz svg{display:block;width:100%;height:auto}
+.hr-fac-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.hr-fac-pill{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:#15203a;border:1px solid #2b3c66;color:#cbd5e1}
+
 </style><script src="https://betlab.sportslabshq.com/hero.js" defer></script><script>
 document.addEventListener("DOMContentLoaded",()=>{const a=document.getElementById("app");const f=()=>{const h=(location.hash||"#today").slice(1);if(typeof IDLE==="function"&&D.meta&&IDLE())return;if((h===""||h==="today")&&!a.querySelector("[data-slhero]")&&!a.querySelector(".card")?.textContent.startsWith("Loading")){const d=document.createElement("div");d.setAttribute("data-slhero","");d.dataset.sport="mlb";d.style.margin="0 0 12px";a.prepend(d);window.SLHero&&window.SLHero()}};new MutationObserver(f).observe(a,{childList:true});window.addEventListener("hashchange",()=>setTimeout(f,50));setTimeout(f,1500)});
 </script><script src="https://sportslabshq.com/sl/sl.js" defer></script><script src="https://betlab.sportslabshq.com/liveres.js?v=2"></script>
-<script src="sl-sports.js"></script><script src="/sl-neutral.js" defer></script><script src="hrking.js?v=2"></script></head><body>
+<script src="sl-sports.js"></script><script src="/sl-neutral.js" defer></script><script src="hrking.js?v=3"></script></head><body>
 <header><div class="top"><button class="mb" onclick="document.body.classList.toggle('navopen')" aria-label="Menu">☰</button><div class="logo">MLB <span>Lab</span></div><div class="tag">Vision with Data</div><a class="brand" href="https://sportslabshq.com/" title="Sports Labs">▲ Sports Labs</a><div class="badge" id="badge">Loading…</div></div></header>
 <aside><nav id="nav"></nav></aside><div id="scrim" onclick="document.body.classList.remove('navopen')"></div><main id="app"><div class="card">Loading data…</div></main>
 <script>
@@ -81,11 +94,138 @@ const am=p=>p==null?'–':p>=.5?'-'+Math.round(p/(1-p)*100):'+'+Math.round((1-p)
 const tET=t=>new Date(t).toLocaleString('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET';
 const dLong=d=>new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 function wxIcon(e){if(e.closed)return'🏟️';const c=e.code;if(c==null)return'🌤️';if(c>=95)return'⛈️';if(c>=61)return'🌧️';if(c>=51)return'🌦️';if(c>=45)return'🌫️';if(c>=3)return'☁️';if(c>=1)return'⛅';return'☀️'}
-function park(e,sz=120){ // field diagram, CF at top; wind arrow relative to park orientation
- let arrow='';if(!e.closed&&e.wmph!=null&&e.wdir!=null&&e.az!=null){const toward=(e.wdir+180)%360;const rel=toward-e.az;const len=Math.min(44,10+e.wmph*2.2);
-  const col=e.wout>2?'#3ddc97':e.wout<-2?'#ff6b7a':'#ffc857';
-  arrow=`<g transform="translate(60,72) rotate(${rel})"><line x1="0" y1="${len/2}" x2="0" y2="${-len/2}" stroke="${col}" stroke-width="4" stroke-linecap="round"/><path d="M-8,${-len/2+8} L0,${-len/2-4} L8,${-len/2+8} Z" fill="${col}"/></g>`}
- return `<svg width="${sz}" height="${sz}" viewBox="0 0 120 120" aria-label="park and wind"><path d="M60,110 L10,58 Q60,0 110,58 Z" fill="#163a26" stroke="#2f6b45"/><path d="M60,110 L38,86 L60,64 L82,86 Z" fill="#6b4a2b" opacity=".75"/><circle cx="60" cy="110" r="3" fill="#fff"/><text x="60" y="18" fill="#8d97b8" font-size="9" text-anchor="middle">CF</text>${arrow}${e.closed?'<text x="60" y="66" fill="#e6ebff" font-size="10" text-anchor="middle">Roof closed</text>':''}</svg>`}
+const PARK_DIMS={"American Family Field":[344,371,400,374,345],"Tropicana Field":[315,370,404,370,322],"George M. Steinbrenner Field":[318,399,408,385,314],"Wrigley Field":[355,368,400,368,353],"Yankee Stadium":[318,399,408,385,314],"Fenway Park":[310,379,390,380,302],"Dodger Stadium":[330,375,395,375,330],"Petco Park":[336,357,396,391,322],"Truist Park":[335,385,400,375,325],"Progressive Field":[325,370,400,375,325],"Rate Field":[330,375,400,375,335],"Citi Field":[335,370,408,375,330],"Citizens Bank Park":[329,374,401,369,330],"Nationals Park":[336,377,402,370,335],"loanDepot park":[344,386,400,387,335],"PNC Park":[325,389,399,375,320],"Great American Ball Park":[328,379,404,370,325],"Busch Stadium":[336,375,400,375,335],"Coors Field":[347,390,415,375,350],"Chase Field":[330,374,407,374,334],"Oracle Park":[339,364,391,415,309],"T-Mobile Park":[331,378,401,381,326],"Angel Stadium":[347,390,396,370,350],"Sutter Health Park":[330,388,403,388,325],"Globe Life Field":[329,372,407,374,326],"Daikin Park":[315,362,409,373,326],"Kauffman Stadium":[330,387,410,387,330],"Target Field":[339,377,404,367,328],"Comerica Park":[345,370,412,365,330],"Oriole Park at Camden Yards":[333,384,400,373,318],"Rogers Centre":[328,368,400,359,328]};
+function park(e,venue='',sz=152){
+ const dims=PARK_DIMS[venue]||[330,375,400,375,330];
+ const P=wxPhys(e,1);
+ const hrR=P.hr_rhb||0,hrL=P.hr_lhb||0;
+ const zFill=v=>v>=5?'rgba(61,220,151,0.34)':v>=2?'rgba(61,220,151,0.20)':v<=-5?'rgba(56,189,248,0.28)':v<=-2?'rgba(56,189,248,0.18)':'rgba(100,116,139,0.20)';
+ const zStrk=v=>v>=3?'#3ddc97':v<=-3?'#38bdf8':'#475569';
+ const zTxt=v=>v>=3?'#3ddc97':v<=-3?'#7dd3fc':'#94a3b8';
+ const temp=Math.round(e.temp_out??e.temp??72);
+ const hgt=Math.round(sz*0.84);
+ let compass='';
+ if(e.closed){
+  compass=`<g transform="translate(78,52)">
+   <circle cx="0" cy="0" r="17" fill="rgba(15,23,42,0.82)" stroke="#475569" stroke-width="1.2" stroke-dasharray="2 2"/>
+   <path d="M-13,4 A13,13 0 0,1 13,4" fill="none" stroke="#a5b4fc" stroke-width="2.2" stroke-linecap="round"/>
+   <line x1="-14" y1="4" x2="14" y2="4" stroke="#a5b4fc" stroke-width="1.5"/>
+   <text x="0" y="-1" fill="#e6ebff" font-size="6.8" font-weight="800" text-anchor="middle">DOME</text>
+  </g>`;
+ }else if(e.wmph!=null){
+  const rel=P.rel!=null?P.rel:((e.wdir!=null&&e.az!=null)?(((e.wdir+180)%360-e.az+540)%360)-180:0);
+  const col=e.wout>2?'#3ddc97':e.wout<-2?'#38bdf8':'#ffc857';
+  const len=Math.min(15,7+e.wmph*0.65);
+  compass=`<g transform="translate(78,52)">
+   <circle cx="0" cy="0" r="17" fill="rgba(11,16,32,0.82)" stroke="#334155" stroke-width="1.1"/>
+   <text x="0" y="-12.5" fill="#64748b" font-size="5.5" font-weight="700" text-anchor="middle">CF</text>
+   <g transform="rotate(${rel.toFixed(0)})">
+    <line class="wv-flow" x1="-5" y1="${len}" x2="-5" y2="${-len}" stroke="${col}" stroke-width="1.1" opacity="0.65"/>
+    <line class="wv-flow" x1="5" y1="${len}" x2="5" y2="${-len}" stroke="${col}" stroke-width="1.1" opacity="0.65"/>
+    <line x1="0" y1="${len}" x2="0" y2="${-len+3}" stroke="${col}" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M-4.8,${-len+6} L0,${-len-2.5} L4.8,${-len+6} Z" fill="${col}"/>
+   </g>
+  </g>`;
+ }
+ const windLbl=e.closed?`ROOF · ${temp}°F`:`${e.wmph!=null?Math.round(e.wmph)+' mph':'Calm'} · ${temp}°F`;
+ return `<div class="park-svg-viz" title="${esc(venue||'Ballpark')} · LF ${dims[0]}' / CF ${dims[2]}' / RF ${dims[4]}' · ${esc(P.vec)}">
+  <svg width="${sz}" height="${hgt}" viewBox="0 0 156 128" aria-label="Ballpark diamond, fence distances, and wind vector compass">
+   <!-- Outfield Base Grass -->
+   <path d="M78,102 L16,46 Q45,16 78,14 Q111,16 140,46 Z" fill="#133324" stroke="#2c5e43" stroke-width="1.2"/>
+   <!-- Left-Field Power Alley (RHB Pull Zone) -->
+   <path d="M78,102 L16,46 Q45,16 78,14 Z" fill="${zFill(hrR)}" stroke="${zStrk(hrR)}" stroke-width="1.4"/>
+   <!-- Right-Field Power Alley (LHB Pull Zone) -->
+   <path d="M78,102 L78,14 Q111,16 140,46 Z" fill="${zFill(hrL)}" stroke="${zStrk(hrL)}" stroke-width="1.4"/>
+   <!-- Outfield Warning Track Arc -->
+   <path d="M16,46 Q45,16 78,14 Q111,16 140,46" fill="none" stroke="#94a3b8" stroke-width="2.2"/>
+   <!-- Foul Lines -->
+   <line x1="78" y1="102" x2="16" y2="46" stroke="#cbd5e1" stroke-width="1.1" opacity="0.85"/>
+   <line x1="78" y1="102" x2="140" y2="46" stroke="#cbd5e1" stroke-width="1.1" opacity="0.85"/>
+   <!-- Infield Dirt & Grass Diamond -->
+   <path d="M78,102 L58,82 L78,62 L98,82 Z" fill="#6b4a2b" stroke="#8a623a" stroke-width="1"/>
+   <path d="M78,99 L62,82 L78,66 L94,82 Z" fill="#1c4d32"/>
+   <rect x="76" y="60" width="4" height="4" fill="#fff" transform="rotate(45 78 62)"/>
+   <rect x="56" y="80" width="4" height="4" fill="#fff" transform="rotate(45 58 82)"/>
+   <rect x="96" y="80" width="4" height="4" fill="#fff" transform="rotate(45 98 82)"/>
+   <circle cx="78" cy="82" r="2.2" fill="#8a623a"/>
+   <circle cx="78" cy="102" r="3" fill="#fff"/>
+   <!-- Fence Distances (LF / LCF / CF / RCF / RF) -->
+   <text x="15" y="40" fill="#e6ebff" font-size="8.2" font-weight="800" text-anchor="start">LF ${dims[0]}'</text>
+   <text x="43" y="19" fill="#8d97b8" font-size="6.8" font-weight="600" text-anchor="middle">${dims[1]}'</text>
+   <text x="78" y="10" fill="#ffffff" font-size="8.6" font-weight="800" text-anchor="middle">CF ${dims[2]}'</text>
+   <text x="113" y="19" fill="#8d97b8" font-size="6.8" font-weight="600" text-anchor="middle">${dims[3]}'</text>
+   <text x="141" y="40" fill="#e6ebff" font-size="8.2" font-weight="800" text-anchor="end">RF ${dims[4]}'</text>
+   <!-- LF / RF HR Carry Badges -->
+   <text x="34" y="66" fill="${zTxt(hrR)}" font-size="7.5" font-weight="800" text-anchor="middle">${hrR>0?'+':''}${hrR}%</text>
+   <text x="122" y="66" fill="${zTxt(hrL)}" font-size="7.5" font-weight="800" text-anchor="middle">${hrL>0?'+':''}${hrL}%</text>
+   <!-- Wind Compass & Vector Arrow -->
+   ${compass}
+   <!-- Bottom Wind & Temp Pill -->
+   <rect x="24" y="109" width="108" height="16" rx="8" fill="#0b1020" stroke="#2b3c66" stroke-width="1"/>
+   <text x="78" y="120" fill="#d6e4ff" font-size="8" font-weight="700" text-anchor="middle">${esc(windLbl)}</text>
+  </svg>
+ </div>`;
+}
+function hrProbBar(p,g){
+ const e=(g&&g.env)||{},fe=p.feats||{},P=wxPhys(e,fe.pf??1);
+ const modelP=Math.max(0.01,+(p.p_hr||0.08));
+ const mktP=(p.market&&p.market.implied)?+p.market.implied:null;
+ const refP=mktP!=null?mktP:0.095;
+ const refLbl=mktP!=null?`Book Implied ${(mktP*100).toFixed(1)}%`:`MLB Avg Ref 9.5%`;
+ const maxScale=Math.max(0.26,modelP*1.25,refP*1.25);
+ const wTot=Math.min(290,Math.max(36,(modelP/maxScale)*290));
+ const xRef=Math.min(296,Math.max(24,14+(refP/maxScale)*290));
+ const brl=Math.max(0.02,+(fe.barrel||0.08));
+ const hb=fe.hr_boost!=null?fe.hr_boost:(p.bats==='L'?P.hr_lhb:P.hr_rhb);
+ const spl=+(fe.split||0);
+ const w1=wTot*0.52,w2=wTot*0.28,w3=Math.max(4,wTot-w1-w2);
+ const diffPts=((modelP-refP)*100);
+ return `<div class="hr-prob-viz" aria-label="HR Probability Breakdown: Model vs Reference">
+  <svg viewBox="0 0 320 40" width="100%" role="img">
+   <text x="14" y="11" font-size="9" font-weight="800" fill="#e6ebff">Model HR: ${(modelP*100).toFixed(1)}%</text>
+   <text x="306" y="11" font-size="8.8" font-weight="700" fill="${diffPts>=0?'#3ddc97':'#ffc857'}" text-anchor="end">${esc(refLbl)} (${diffPts>=0?'+':''}${diffPts.toFixed(1)} pts)</text>
+   <rect x="14" y="16" width="292" height="10" rx="5" fill="#16223c" stroke="#26355c" stroke-width="1"/>
+   <!-- Segmented Model HR Contributions: Barrel/EV + Platoon + Park/Wind -->
+   <rect x="14" y="16" width="${w1.toFixed(1)}" height="10" rx="4" fill="#ff9f43"/>
+   <rect x="${(14+w1).toFixed(1)}" y="16" width="${w2.toFixed(1)}" height="10" fill="#4fc3ff"/>
+   <rect x="${(14+w1+w2).toFixed(1)}" y="16" width="${w3.toFixed(1)}" height="10" rx="3" fill="${hb>=0?'#3ddc97':'#38bdf8'}"/>
+   <!-- Reference / Book Implied Marker -->
+   <line x1="${xRef.toFixed(1)}" y1="13" x2="${xRef.toFixed(1)}" y2="30" stroke="#ffffff" stroke-width="2"/>
+   <circle cx="${xRef.toFixed(1)}" cy="21" r="2.8" fill="#ffffff"/>
+   <text x="14" y="37" font-size="7.8" fill="#8d97b8">■ Barrel/EV ${(brl*100).toFixed(1)}%   ■ Platoon ${spl>=0?'+':''}${(spl*100).toFixed(1)}%   ■ Park/Wind ${hb>=0?'+':''}${hb}%</text>
+  </svg>
+  <div class="hr-fac-pills">
+   <span class="hr-fac-pill" style="border-color:#7c4a1a;color:#ffc857">🔥 Barrel ${(brl*100).toFixed(1)}% · EV ${f(fe.ev,1)}</span>
+   <span class="hr-fac-pill" style="border-color:${hb>=0?'#1d6b4c':'#264b73'};color:${hb>=0?'#3ddc97':'#7dd3fc'}">🏟️ Park/Wind ${hb>=0?'+':''}${hb}%</span>
+   <span class="hr-fac-pill" style="border-color:#264b73;color:#a5d8ff">⚾ Platoon ${spl>=0?'+':''}${(spl*100).toFixed(1)}% vs ${esc((p.pitcher&&p.pitcher.throws)||'R')}HP</span>
+  </div>
+ </div>`;
+}
+window.hrProbBar=hrProbBar;
+function topHrCallouts(H){
+ if(!H||!H.length)return '';
+ const top=[...H].sort((a,b)=>b.score-a.score).slice(0,3);
+ return `<div class="hr-callouts">${top.map(p=>{
+  const g=G(p.pk)||{env:{}};
+  return `<div class="hr-callout">
+   <div class="hr-callout-top">
+    ${hs(p.id)}
+    <div style="flex:1;min-width:0">
+     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <a href="#hrking/${p.id}" style="font-weight:800;font-size:15px;color:var(--t)">${esc(p.name)}</a>
+      <span class="pill ok">Highlighted</span>
+     </div>
+     <div class="small m">${esc(p.team)} ${p.home?'vs':'@'} ${esc(p.opp)} · Bats ${esc(p.bats)} · vs ${esc((p.pitcher&&p.pitcher.name)||'TBD')}</div>
+    </div>
+    <span class="sc" style="background:${scol(p.score)}">${p.score}</span>
+   </div>
+   <div style="display:flex;gap:10px;align-items:center">
+    <div style="flex:1;min-width:0">${hrProbBar(p,g)}</div>
+    ${park(g.env||{},g.venue||'',118)}
+   </div>
+  </div>`;
+ }).join('')}</div>`;
+}
 function wxPhys(e,pf=1){if(!e)return{vec:'Wind N/A',rel:null,hr_lhb:0,hr_rhb:0,run_env:0};if(e.physics&&pf===1)return e.physics;const pfp=((pf??1)-1)*100;if(e.closed)return{vec:'Dome / Roof Closed',rel:null,hr_lhb:Math.round(pfp),hr_rhb:Math.round(pfp),run_env:Math.round(pfp*0.45)};const mph=e.wmph,wdir=e.wdir,az=e.az,t=e.temp_out??e.temp??72,hm=e.hum??50;if(mph==null||wdir==null||az==null){const te=(t-72)*0.42+pfp;return{vec:'Wind N/A',rel:null,hr_lhb:Math.round(te),hr_rhb:Math.round(te),run_env:Math.round(te*0.5)}}const rel=(((wdir+180)%360-az+540)%360)-180,ar=Math.abs(rel);const vec=mph<2.5?'Calm':ar<=22.5?'Out to CF':ar<=67.5?(rel>0?'Out to RF':'Out to LF'):ar<=112.5?(rel>0?'Crosswind L→R':'Crosswind R→L'):ar<=157.5?(rel>0?'In from LF':'In from RF'):'In from CF';const wl=mph*Math.cos((rel-20)*Math.PI/180)*1.45+(t-72)*0.42+(hm-50)*0.02+pfp,wr=mph*Math.cos((rel+20)*Math.PI/180)*1.45+(t-72)*0.42+(hm-50)*0.02+pfp,re=(e.wout||0)*0.65+(t-72)*0.22+pfp*0.45;return{vec,rel:Math.round(rel*10)/10,hr_lhb:Math.round(wl),hr_rhb:Math.round(wr),run_env:Math.round(re)}}
 function svgWindArr(rel,col='#4fc3ff',sz=13){if(rel==null)return'🏟️';return `<svg class="wx-arr" width="${sz}" height="${sz}" viewBox="0 0 16 16" aria-hidden="true"><g transform="translate(8,8) rotate(${rel.toFixed(0)})"><line x1="0" y1="5" x2="0" y2="-5" stroke="${col}" stroke-width="2.2" stroke-linecap="round"/><path d="M-3.5,-1.5 L0,-6 L3.5,-1.5 Z" fill="${col}"/></g></svg>`}
 function gamePhysBar(e){const P=wxPhys(e,1);const c=v=>v>=3?'pos':v<=-3?'neg':'neu';const s=v=>(v>0?'+':'')+v+'%';const ac=e.wout>2?'#3ddc97':e.wout<-2?'#ff6b7a':'#4fc3ff';return `<div class="wx-phys"><span class="wx-pill ${e.closed?'neu':e.wout>2?'pos':e.wout<-2?'neg':'neu'}" title="Stadium wind vector relative to Center Field">${svgWindArr(P.rel,ac)}${e.closed?'Dome / Roof Closed':(e.wmph!=null?e.wmph+' mph ':'')+esc(P.vec)}</span><span class="wx-pill ${c(P.hr_lhb)}" title="Batted-ball physics HR modifier for left-handed batters (RF pull carry + temp)">LHB HR ${s(P.hr_lhb)}</span><span class="wx-pill ${c(P.hr_rhb)}" title="Batted-ball physics HR modifier for right-handed batters (LF pull carry + temp)">RHB HR ${s(P.hr_rhb)}</span><span class="wx-pill ${c(P.run_env)}" title="Overall XBH & Run Environment physics boost">XBH/Runs ${s(P.run_env)}</span></div>`}
@@ -113,9 +253,9 @@ function kingCard(k){if(!k)return'<div class="card m">No probable starters annou
 function today(){if(IDLE())return idle();const H=D.hr.players,K=D.k.pitchers;let h=banner()+ciCard()+(D.hrr&&D.hrr.hotd?hotdCard(D.hrr.hotd):'')+kingCard(D.k.king);if(D.hrr&&(D.hrr.safe||D.hrr.rbi))h+=`<div class="note">🎯 Today's <a href="#parlays">H+R+RBI Parlay${D.hrr.safe?' ('+sg(D.hrr.safe.fair)+')':''} and RBI Parlay${D.hrr.rbi?' ('+sg(D.hrr.rbi.fair)+')':''}</a> are posted.</div>`;
  h+=`<div class="grid">${D.slate.games.map(g=>{const e=g.env;return `<div class="card"><div class="gm"><div style="flex:1"><b>${tlogo(g.awayId)}${g.away} @ ${tlogo(g.homeId)}${g.home}</b><div class="small m">${tET(g.start)} · ${esc(g.venue)}</div><div class="small m">${esc(g.series||'')} ${g.seriesGame?'· Game '+g.seriesGame:''} · ${esc(g.status)}${g.status==='Final'?' '+g.score[0]+'-'+g.score[1]:''}</div>
  <div class="wx" style="margin-top:8px"><span class="ic">${wxIcon(e)}</span><div class="small">${e.closed?'Indoors 72°F (assumed)':e.temp_out!=null?e.temp_out+'°F':'–'} · ${e.hum!=null&&!e.closed?e.hum+'% humidity':''}<br>${windTxt(e)}<br><span class="m">${esc(e.roof_note)}${e.wsrc?' · '+esc(e.wsrc):''}${e.wsrc&&e.wsrc!='MLB game-day report'?' · <a href="https://www.met.no/en" rel="noopener" target="_blank" style="color:inherit">Weather: MET Norway</a> (CC BY 4.0)':''}</span></div></div>
- ${gamePhysBar(e)}<div class="small m" style="margin-top:6px">SP: ${esc(nm(g.sp.away))} vs ${esc(nm(g.sp.home))}</div></div>${park(e)}</div></div>`}).join('')}</div>`;
+ ${gamePhysBar(e)}<div class="small m" style="margin-top:6px">SP: ${esc(nm(g.sp.away))} vs ${esc(nm(g.sp.home))}</div></div>${park(e,g.venue)}</div></div>`}).join('')}</div>`;
  h+=`<div class="card"><h3>🏠💣 Home Run Board <span class="m small">ranked by HR Score · ${H.length} batters</span></h3><div class="small m" style="margin-bottom:8px">HR Score = percentile (1–99) of our estimated P(1+ HR) among every 2026 batter-game. % is a model estimate, not a guarantee. Market = Book A when Bet Lab's budgeted pull has it, else "no line". Edge = our % − market implied % (market includes vig).</div>${H.length&&H.every(p=>p.lineup==='projected')||H.some(p=>!p.pitcher||!p.pitcher.name)?`<div class="small" style="margin-bottom:8px;color:#facc15">Starters/lineups pending for ${esc(D.hr.date||'the next slate')}. Rows use projected lineups until the real ones post; results appear only after this slate's games start.</div>`:''}
- <div class="filters" style="margin-bottom:8px"><input id="q" placeholder="Search batter or team" oninput="filt()" style="width:220px"></div>
+ ${topHrCallouts(H)}<div class="filters" style="margin-bottom:8px"><input id="q" placeholder="Search batter or team" oninput="filt()" style="width:220px"></div>
  <div class="tw"><table class="s" id="hrt"><thead><tr><th>Batter</th><th>Score</th><th>Our %</th><th>Market</th><th>Edge</th><th class="hide-m">Spot</th><th class="hide-m">vs SP</th><th class="hide-m">Barrel%</th><th class="hide-m">30d trend</th><th class="hide-m">BvP</th><th class="hide-m">Park</th><th>Wind &amp; Physics</th>${H.some(p=>p.result)?'<th>Result</th>':''}</tr></thead><tbody>${H.map(p=>{const g=G(p.pk);const mk=p.market;return `<tr data-s="${esc((p.name+' '+p.team).toLowerCase())}"><td class="l">${hs(p.id)} <a href="#matchups/${p.pk}">${esc(p.name)}</a> <span class="m small">${p.team} ${p.home?'vs':'@'} ${p.opp}</span> ${p.lineup==='projected'?'<span class="pill est">proj</span>':'<span class="pill ok">conf</span>'}${window.LR?LR.tag('mlb',p.id,'HR (1+)',null,p.name,'',(g||{}).start||D.hr.date||''):''}</td>
  <td data-v="${p.score}"><span class="sc" style="background:${scol(p.score)}">${p.score}</span></td><td data-v="${p.p_hr}"><b>${pct(p.p_hr)}</b></td><td data-v="${mk?mk.implied:-1}">${mk?((mk.src==='DraftKings'||mk.src==='Book A')?'Book A '+(mk.odds>0?'+':'')+mk.odds:'Exchange A '+pct(mk.implied,0))+'<div class="small m">'+pct(mk.implied,1)+' implied</div>':'<span class="m">no line</span>'}</td>
  <td data-v="${p.edge??-9}" class="${p.edge>0.02?'g':p.edge<-0.02?'r':''}">${p.edge==null?'–':(p.edge>0?'+':'')+(p.edge*100).toFixed(1)+' pts'}</td><td class="hide-m">${p.spot}</td><td class="hide-m l small">${esc(p.pitcher.name||'TBD')} (${p.pitcher.throws})</td><td class="hide-m">${pct(p.feats.barrel)}</td><td class="hide-m">${f(p.feats.t30,2)}</td>
@@ -125,7 +265,7 @@ function today(){if(IDLE())return idle();const H=D.hr.players,K=D.k.pitchers;let
 window.filt=()=>{const q=$('#q').value.toLowerCase();document.querySelectorAll('#hrt tbody tr').forEach(r=>r.style.display=r.dataset.s.includes(q)?'':'none')};
 const nm=id=>{if(!id)return'TBD';const k=D.k.pitchers.find(x=>x.id===id);return k?k.name:'#'+id};
 function matchups(pk){if(IDLE())return idle();const gs=D.slate.games;pk=+pk||gs[0]?.pk;const g=G(pk);if(!g)return banner()+'<div class="card">No games.</div>';
- let h=banner()+`<div class="tabs">${gs.map(x=>`<a href="#matchups/${x.pk}" class="${x.pk===pk?'on':''}">${x.away} @ ${x.home}</a>`).join('')}</div><div class="card" style="padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><b>${esc(g.away)} @ ${esc(g.home)} · ${esc(g.venue)} · Park Physics &amp; Wind Vector</b>${gamePhysBar(g.env)}</div></div>`;
+ let h=banner()+`<div class="tabs">${gs.map(x=>`<a href="#matchups/${x.pk}" class="${x.pk===pk?'on':''}">${x.away} @ ${x.home}</a>`).join('')}</div><div class="card" style="padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><b>${esc(g.away)} @ ${esc(g.home)} · ${esc(g.venue)} · Park Physics &amp; Wind Vector</b>${gamePhysBar(g.env)}</div>${park(g.env,g.venue,128)}</div></div>`;
  for(const side of ['away','home']){const team=g[side],sp=g.sp[side==='away'?'home':'away'];const rows=D.hr.players.filter(p=>p.pk===pk&&p.team===team).sort((a,b)=>a.spot-b.spot);
   h+=`<div class="card"><h3>${tlogo(g[side+'Id'])}${team} lineup vs ${esc(nm(sp))} <span class="pill ${g.lineup_status[side]==='confirmed'?'ok':'est'}">${g.lineup_status[side]}</span></h3><div class="tw"><table class="s"><thead><tr><th>#</th><th class="l">Batter</th><th>Bats</th><th>BvP PA</th><th>BvP HR</th><th>BvP xwOBA</th><th>BvP effect</th><th>Split vs hand</th><th>HR/PA (stabilized)</th><th>EV</th><th>xISO</th><th>7/14/30d form</th><th>Score</th></tr></thead><tbody>${rows.map(p=>`<tr><td>${p.spot}</td><td class="l">${esc(p.name)}</td><td>${p.bats}</td><td>${p.bvp.pa}</td><td>${p.bvp.hr}</td><td>${p.bvp.pa?f(p.bvp.xwoba,3):'–'}</td><td class="${p.bvp.adj>0.05?'g':p.bvp.adj<-0.05?'r':''}">${p.bvp.adj>0?'+':''}${f(p.bvp.adj*100,1)}%</td><td>${p.feats.split>0?'+':''}${f(p.feats.split*100,1)}%</td><td>${pct(p.feats.hr_rate,2)}</td><td>${f(p.feats.ev,1)}</td><td>${f(p.feats.xiso,3)}</td><td>${f(p.feats.t7,2)} / ${f(p.feats.t14,2)} / ${f(p.feats.t30,2)}</td><td><span class="sc" style="background:${scol(p.score)};width:30px;height:30px;font-size:13px">${p.score}</span></td></tr>
   <tr><td></td><td colspan="12" class="l small m" style="white-space:normal">Top drivers: ${p.drivers.map(d=>`<span class="${d.v>0?'g':'r'}">${esc(d.f)} ${d.v>0?'▲':'▼'}</span>`).join(' · ')}</td></tr>`).join('')}</tbody></table></div>
