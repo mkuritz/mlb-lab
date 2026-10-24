@@ -205,9 +205,9 @@ window.hrProbBar=hrProbBar;
 function topHrCallouts(H){
  if(!H||!H.length)return '';
  const top=[...H].sort((a,b)=>b.score-a.score).slice(0,3);
- return `<div class="hr-callouts">${top.map(p=>{
+ return `<div class="hr-callouts" data-sl-public>${top.map(p=>{
   const g=G(p.pk)||{env:{}};
-  return `<div class="hr-callout">
+  return `<div class="hr-callout" data-sl-public>
    <div class="hr-callout-top">
     ${hs(p.id)}
     <div style="flex:1;min-width:0">
