@@ -71,7 +71,7 @@ details summary{cursor:pointer;color:var(--a)}
 }
 </style><script src="https://betlab.sportslabshq.com/hero.js" defer></script><script>
 document.addEventListener("DOMContentLoaded",()=>{const a=document.getElementById("app");const f=()=>{const h=(location.hash||"#today").slice(1);if(typeof IDLE==="function"&&D.meta&&IDLE())return;if((h===""||h==="today")&&!a.querySelector("[data-slhero]")&&!a.querySelector(".card")?.textContent.startsWith("Loading")){const d=document.createElement("div");d.setAttribute("data-slhero","");d.dataset.sport="mlb";d.style.margin="0 0 12px";a.prepend(d);window.SLHero&&window.SLHero()}};new MutationObserver(f).observe(a,{childList:true});window.addEventListener("hashchange",()=>setTimeout(f,50));setTimeout(f,1500)});
-</script><script src="https://sportslabshq.com/sl/sl.js?v=10" defer></script><script src="https://betlab.sportslabshq.com/liveres.js?v=2"></script>
+</script><script src="https://sportslabshq.com/sl/sl.js?v=11" defer></script><script src="https://betlab.sportslabshq.com/liveres.js?v=2"></script>
 <script src="sl-sports.js"></script><script src="/sl-neutral.js" defer></script><script src="tailcard.js?v=1"></script><script src="hrking.js?v=4"></script></head><body>
 <header><div class="top"><button class="mb" onclick="document.body.classList.toggle('navopen')" aria-label="Menu">☰</button><div class="logo">MLB <span>Lab</span></div><div class="tag">Vision with Data</div><a class="brand" href="https://sportslabshq.com/" title="Sports Labs">▲ Sports Labs</a><div class="badge" id="badge">Loading…</div></div></header>
 <aside><nav id="nav"></nav></aside><div id="scrim" onclick="document.body.classList.remove('navopen')"></div><main id="app"><div class="card">Loading data…</div></main>
