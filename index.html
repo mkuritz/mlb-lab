@@ -62,6 +62,13 @@ details summary{cursor:pointer;color:var(--a)}
 .hr-fac-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
 .hr-fac-pill{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:#15203a;border:1px solid #2b3c66;color:#cbd5e1}
 
+
+#slbar{position:fixed;bottom:12px;right:14px;padding:6px 12px;font-size:12px;border-radius:99px;background:rgba(15,23,42,.94);border:1px solid #34d399;color:#ecfdf5;z-index:85;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+@media(min-width:1200px){
+  main{max-width:1480px;padding:20px 28px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .hr-callouts{grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}
+}
 </style><script src="https://betlab.sportslabshq.com/hero.js" defer></script><script>
 document.addEventListener("DOMContentLoaded",()=>{const a=document.getElementById("app");const f=()=>{const h=(location.hash||"#today").slice(1);if(typeof IDLE==="function"&&D.meta&&IDLE())return;if((h===""||h==="today")&&!a.querySelector("[data-slhero]")&&!a.querySelector(".card")?.textContent.startsWith("Loading")){const d=document.createElement("div");d.setAttribute("data-slhero","");d.dataset.sport="mlb";d.style.margin="0 0 12px";a.prepend(d);window.SLHero&&window.SLHero()}};new MutationObserver(f).observe(a,{childList:true});window.addEventListener("hashchange",()=>setTimeout(f,50));setTimeout(f,1500)});
 </script><script src="https://sportslabshq.com/sl/sl.js" defer></script><script src="https://betlab.sportslabshq.com/liveres.js?v=2"></script>
